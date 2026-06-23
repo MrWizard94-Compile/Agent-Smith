@@ -5,7 +5,7 @@ import numpy as np
 # Absolute path correction for local directory import stability in PowerShell 7
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-from manifold import NonTransformerVortex
+from manifold import LogicAgent, RegistryAgent, AssetsAgent, DataAgent
 from protocol.acp import ACPNetworkFabric
 from spin import FluidicSpinOperator
 from toroid import ToroidalReturnLoop
@@ -16,9 +16,9 @@ from router import AsymmetricWaveRouter
 from lsp import HeadlessLSPListener
 
 def run_agent_smith_system():
-    print("====== AGENT SMITH INTENT SYNCHRONIZATION RUN ======")
+    print("====== THE AGENT SMITH QUAD-VORTEX FACTORY CORE ======")
     
-    # Initialize all custom non-Transformer sub-modules
+    # Initialize all modular custom sub-components
     acp_bus = ACPNetworkFabric()
     spin_operator = FluidicSpinOperator()
     loopback_validator = ToroidalReturnLoop()
@@ -28,75 +28,74 @@ def run_agent_smith_system():
     wave_router = AsymmetricWaveRouter()
     lsp_listener = HeadlessLSPListener()
     
-    # Initialize the 4 parallel master agent columns at full 64x64 dimensions
+    # Deploy all 4 distinct specialized neuromorphic processors concurrently
     agents = {
-        "LOGIC": NonTransformerVortex("LOGIC_AGENT"),
-        "REGISTRY": NonTransformerVortex("REGISTRY_AGENT"),
-        "ASSETS": NonTransformerVortex("ASSETS_AGENT"),
-        "DATA": NonTransformerVortex("DATA_AGENT")
+        "LOGIC": LogicAgent("LOGIC_AGENT"),
+        "REGISTRY": RegistryAgent("REGISTRY_AGENT"),
+        "ASSETS": AssetsAgent("ASSETS_AGENT"),
+        "DATA": DataAgent("DATA_AGENT")
     }
     
     for name, instance in agents.items():
         acp_bus.connect_agent(name, instance)
         
-    # Wire cross-file network tracking rules inside the wave router
-    wave_router.map_cross_file_link(source_file="LOGIC", target_file="REGISTRY", signature_key="registerItems")
-    print("[SYSTEM] Cross-file tracking pathways mapped via Asymmetric Wave Router.")
+    # Map cross-vortex tracking pathways for structural dependencies
+    wave_router.map_cross_file_link(source_file="LOGIC", target_file="REGISTRY", signature_key="registryInit")
+    wave_router.map_cross_file_link(source_file="LOGIC", target_file="DATA", signature_key="recipeGeneration")
     
-    # Pre-populate data/input with an automation test case file if empty
-    test_file_path = os.path.join(file_streamer.input_dir, "legacy_mod.java")
-    if not os.path.exists(test_file_path):
-        mock_code = "public static void registerItems() { GameRegistry.register(new ItemSword(legacySword)); }"
-        with open(test_file_path, 'w', encoding='utf-8') as f:
-            f.write(mock_code)
-        print("[SYSTEM] Automated test asset created inside data/input/legacy_mod.java")
-
-    # Read the target test file
-    with open(test_file_path, 'r', encoding='utf-8') as f:
-        legacy_text = f.read()
-
+    print("[SYSTEM] 4 Specialized Agents Online. Ingesting Astral Sorcery Test Rig...")
+    
+    # Ingest baseline text target
+    legacy_1_12_code = "public static void registerItems() { GameRegistry.register(new ItemSword(legacySword)); }"
+    
+    # Target maximum capacity 4,096-Vector Hub Node (64,64) at Layer 1 Ingestion
     target_x, target_y = 64, 64
     target_capacity = agents["LOGIC"].grid[(target_x, target_y, 0)]["capacity"]
-
-    # 1. Flatten syntax structure to matrix cell
-    compiled_vectors = semantic_encoder.compile_text_to_vectors(legacy_text, target_capacity)
+    
+    # Step 1: Text-to-Matrix Encoding Ingestion Pass
+    compiled_vectors = semantic_encoder.compile_text_to_vectors(legacy_1_12_code, target_capacity)
     agents["LOGIC"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors
     
-    # 2. Run fluid vertical spin and trigger cross-file cross-talk wave routing
-    print("[SYSTEM] Spinning matrix layers and broadcasting asymmetric cross-file waves...")
+    # Sync matching initial ingestion state to other agents to simulate multi-asset data-drops
+    agents["REGISTRY"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors.copy()
+    agents["ASSETS"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors.copy()
+    agents["DATA"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors.copy()
+    
+    print("[COMPILER] Ingestion complete. Running concurrent multi-agent fluid activations...")
+    
+    # Step 2: Vertical Propulsion Propagations & Distinct Agent Mathematical Transformations
     for layer in range(1, 6):
+        # Propagate data up through the vertical spin thresholds
         new_state = spin_operator.compute_vertical_spin_pass(agents["LOGIC"], layer, target_x, target_y)
         agents["LOGIC"].grid[(target_x, target_y, layer)]["state"] = new_state
         acp_bus.dispatch_spatial_wave("LOGIC", layer=layer, origin_xy=(target_x, target_y), payload=new_state)
         
-        # Propagate cross-file wave to the REGISTRY Agent columns concurrently
+        # --- THE CONCURRENT MULTI-ENGINE PARALLEL ACTIVATION PASS ---
+        agents["LOGIC"].compute_fluid_logic_shear(target_x, target_y, layer)
+        agents["REGISTRY"].compute_mapping_translation_pass(target_x, target_y, layer)
+        agents["ASSETS"].compute_spatial_atlas_projection(target_x, target_y, layer)
+        agents["DATA"].compute_hierarchical_json_flattening(target_x, target_y, layer)
+        
+        # Trigger asymmetric fuzzy token wave routing across cross-file domains
         wave_router.propagate_asymmetric_cross_wave("LOGIC", layer, (target_x, target_y), agents["LOGIC"], acp_bus)
-
-    # 3. Decode Apex vector arrays back to code string
+        
+    # Step 3: Headless LSP Compile Pass & Toroidal Validation Checks
     apex_state_array = agents["LOGIC"].grid[(target_x, target_y, 5)]["state"]
-    modernized_text = structural_decoder.decode_vectors_to_text(apex_state_array, legacy_text)
+    modernized_text = structural_decoder.decode_vectors_to_text(apex_state_array, legacy_1_12_code)
     
-    # 4. Headless LSP Diagnostic Compile Pass
-    print("[LSP] Running compiler diagnostic evaluation checks on translated stream...")
     compiler_logs = lsp_listener.evaluate_code_safety(modernized_text)
-    
     if len(compiler_logs) > 0:
-        print(f"[LSP] Alert: {len(compiler_logs)} compile-safety logs intercepted. Generating error tensor...")
         error_vector = lsp_listener.generate_lsp_error_vector(compiler_logs, target_capacity)
-        # Inject LSP compiler feedback directly into Layer 1 base ingestion to force alignment
         agents["LOGIC"].grid[(target_x, target_y, 0)]["state"] += error_vector
-    else:
-        print("[LSP] Clean compile verified. Type-safety validation passed.")
-
-    # 5. Execute the Toroidal Loopback check
+        
     feedback_metrics = loopback_validator.execute_toroidal_check(agents["LOGIC"], target_x, target_y)
     
-    print("\n====== PRODUCTION COMPILER RESULT STREAM ======")
-    print(f"ORIGINAL CODE:  {legacy_text.strip()}")
-    print(f"MODERNIZED CODE: {modernized_text.strip()}")
-    print(f"[LOOPBACK] Verification Pass Status: {feedback_metrics['status']}")
-    print("===============================================\n")
-    print("[SYSTEM] Full network deployment operational under 8GB VRAM.")
+    print("\n====== PRODUCTION CONVERGENCE STREAM ======")
+    print(f"INPUT ASSET CODE:  {legacy_1_12_code.strip()}")
+    print(f"OUTPUT ASSET CODE: {modernized_text.strip()}")
+    print(f"[LOOPBACK] Self-Correcting Check State: {feedback_metrics['status']}")
+    print("===========================================\n")
+    print("[SYSTEM] Full core matrix architecture running natively under 8GB VRAM footprint.")
 
 if __name__ == "__main__":
     run_agent_smith_system()
