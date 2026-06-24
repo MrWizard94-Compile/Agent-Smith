@@ -14,11 +14,15 @@ from decoder import ASTStructuralDecoder
 from stream import BatchFileStreamer
 from router import AsymmetricWaveRouter
 from lsp import HeadlessLSPListener
+from optimizer import VortexOptimizer
+from knowledge import KnowledgeBaseLoader
+from train_factory import ContinuousTrainingFactory
+from loader import WeightRestorationMatrix  # Import the new recovery module
 
 def run_agent_smith_system():
-    print("====== THE AGENT SMITH QUAD-VORTEX FACTORY CORE ======")
+    print("====== THE AGENT SMITH HARDENED UNIFIED AUTOMATION MATRIX ======")
     
-    # Initialize all modular custom sub-components
+    # Initialize all custom modular sub-components
     acp_bus = ACPNetworkFabric()
     spin_operator = FluidicSpinOperator()
     loopback_validator = ToroidalReturnLoop()
@@ -27,8 +31,18 @@ def run_agent_smith_system():
     file_streamer = BatchFileStreamer()
     wave_router = AsymmetricWaveRouter()
     lsp_listener = HeadlessLSPListener()
+    vortex_optimizer = VortexOptimizer(learning_rate=0.05)
+    knowledge_factory = KnowledgeBaseLoader()
+    training_factory = ContinuousTrainingFactory()
+    recovery_manager = WeightRestorationMatrix()  # Spawn the restoration node
     
-    # Deploy all 4 distinct specialized neuromorphic processors concurrently
+    # STAGE 1: Dynamic Knowledge Ingestion Pass (Isolate compiler rules)
+    knowledge_factory.harvest_documentation_rules(lsp_listener)
+    
+    # STAGE 2: Prime Training Influx Queues
+    training_factory.verify_training_assets()
+    
+    # Deploy all 4 distinct specialized neuromorphic processors concurrently at full 64x64 dimensions
     agents = {
         "LOGIC": LogicAgent("LOGIC_AGENT"),
         "REGISTRY": RegistryAgent("REGISTRY_AGENT"),
@@ -39,63 +53,41 @@ def run_agent_smith_system():
     for name, instance in agents.items():
         acp_bus.connect_agent(name, instance)
         
+    # --- THE SYSTEM RECOVERY VALVE ---
+    # Scans checkpoints dir, bypasses random seeds, and loads pre-trained arrays automatically
+    latest_checkpoint = recovery_manager.discover_latest_checkpoint()
+    if latest_checkpoint:
+        recovery_manager.load_matrix_weights(agents, latest_checkpoint)
+    else:
+        print("[RECOVERY] No historical parameters detected on disk. Bootstrapping raw matrix arrays.")
+        
     # Map cross-vortex tracking pathways for structural dependencies
     wave_router.map_cross_file_link(source_file="LOGIC", target_file="REGISTRY", signature_key="registryInit")
     wave_router.map_cross_file_link(source_file="LOGIC", target_file="DATA", signature_key="recipeGeneration")
+    wave_router.map_cross_file_link(source_file="DATA", target_file="REGISTRY", signature_key="recipeDataRemap")
     
-    print("[SYSTEM] 4 Specialized Agents Online. Ingesting Astral Sorcery Test Rig...")
+    # STAGE 3: Hardened Multi-Hour Autonomous Training Run
+    # Tracks learning parameters, clips vector spikes, and checkpoints weights to disk every 100 loops
+    training_factory.execute_autonomous_training_run(
+        agents, acp_bus, spin_operator, loopback_validator, 
+        semantic_encoder, structural_decoder, wave_router, lsp_listener, vortex_optimizer, total_hours=12
+    )
     
-    # Ingest baseline text target
-    legacy_1_12_code = "public static void registerItems() { GameRegistry.register(new ItemSword(legacySword)); }"
+    print("\n[SYSTEM] Continuous training marathon completed. Processing production directory porting...")
     
-    # Target maximum capacity 4,096-Vector Hub Node (64,64) at Layer 1 Ingestion
-    target_x, target_y = 64, 64
-    target_capacity = agents["LOGIC"].grid[(target_x, target_y, 0)]["capacity"]
+    # STAGE 4: Final Production Port Ingestion (Process Astral Sorcery)
+    if not os.path.exists(file_streamer.input_dir) or len(os.listdir(file_streamer.input_dir)) == 0:
+        print("[ALERT] Source folder 'data/input' is empty. Drop your Astral Sorcery folders there to run.")
+        return
+
+    print("[STREAM] Priming file stream channels. Ingesting repository portfolio...")
+    file_streamer.execute_directory_port(
+        agents, acp_bus, spin_operator, loopback_validator, 
+        semantic_encoder, structural_decoder, wave_router, lsp_listener
+    )
     
-    # Step 1: Text-to-Matrix Encoding Ingestion Pass
-    compiled_vectors = semantic_encoder.compile_text_to_vectors(legacy_1_12_code, target_capacity)
-    agents["LOGIC"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors
-    
-    # Sync matching initial ingestion state to other agents to simulate multi-asset data-drops
-    agents["REGISTRY"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors.copy()
-    agents["ASSETS"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors.copy()
-    agents["DATA"].grid[(target_x, target_y, 0)]["state"] = compiled_vectors.copy()
-    
-    print("[COMPILER] Ingestion complete. Running concurrent multi-agent fluid activations...")
-    
-    # Step 2: Vertical Propulsion Propagations & Distinct Agent Mathematical Transformations
-    for layer in range(1, 6):
-        # Propagate data up through the vertical spin thresholds
-        new_state = spin_operator.compute_vertical_spin_pass(agents["LOGIC"], layer, target_x, target_y)
-        agents["LOGIC"].grid[(target_x, target_y, layer)]["state"] = new_state
-        acp_bus.dispatch_spatial_wave("LOGIC", layer=layer, origin_xy=(target_x, target_y), payload=new_state)
-        
-        # --- THE CONCURRENT MULTI-ENGINE PARALLEL ACTIVATION PASS ---
-        agents["LOGIC"].compute_fluid_logic_shear(target_x, target_y, layer)
-        agents["REGISTRY"].compute_mapping_translation_pass(target_x, target_y, layer)
-        agents["ASSETS"].compute_spatial_atlas_projection(target_x, target_y, layer)
-        agents["DATA"].compute_hierarchical_json_flattening(target_x, target_y, layer)
-        
-        # Trigger asymmetric fuzzy token wave routing across cross-file domains
-        wave_router.propagate_asymmetric_cross_wave("LOGIC", layer, (target_x, target_y), agents["LOGIC"], acp_bus)
-        
-    # Step 3: Headless LSP Compile Pass & Toroidal Validation Checks
-    apex_state_array = agents["LOGIC"].grid[(target_x, target_y, 5)]["state"]
-    modernized_text = structural_decoder.decode_vectors_to_text(apex_state_array, legacy_1_12_code)
-    
-    compiler_logs = lsp_listener.evaluate_code_safety(modernized_text)
-    if len(compiler_logs) > 0:
-        error_vector = lsp_listener.generate_lsp_error_vector(compiler_logs, target_capacity)
-        agents["LOGIC"].grid[(target_x, target_y, 0)]["state"] += error_vector
-        
-    feedback_metrics = loopback_validator.execute_toroidal_check(agents["LOGIC"], target_x, target_y)
-    
-    print("\n====== PRODUCTION CONVERGENCE STREAM ======")
-    print(f"INPUT ASSET CODE:  {legacy_1_12_code.strip()}")
-    print(f"OUTPUT ASSET CODE: {modernized_text.strip()}")
-    print(f"[LOOPBACK] Self-Correcting Check State: {feedback_metrics['status']}")
-    print("===========================================\n")
-    print("[SYSTEM] Full core matrix architecture running natively under 8GB VRAM footprint.")
+    print("\n[SUCCESS] Entire repository structure processed, modernized, and reconstructed!")
+    print("==========================================================================\n")
 
 if __name__ == "__main__":
     run_agent_smith_system()

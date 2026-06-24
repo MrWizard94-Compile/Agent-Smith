@@ -1,1 +1,0 @@
-public static void registerItems() { GameRegistry.register(new ItemSword(legacySword)); }
